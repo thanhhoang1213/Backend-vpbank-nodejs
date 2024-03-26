@@ -1,0 +1,12 @@
+# Bỏ qua thư mục node_modules
+node_modules/
+
+# Bỏ qua các tệp log
+*.log
+
+# Bỏ qua các tệp tạm thời của hệ thống
+.DS_Store
+Thumbs.db
+
+# Bỏ qua tệp cài đặt npm
+package-lock.json

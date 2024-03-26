@@ -1,0 +1,25 @@
+{
+  "development": {
+    "host": "localhost",
+    "dialect": "mssql",
+    "username": "sa",
+    "password": "123",
+    "database": "dev_vBank_eda",
+    "logging": "true",
+    "timezone": "+07:00"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
