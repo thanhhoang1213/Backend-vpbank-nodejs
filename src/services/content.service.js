@@ -196,6 +196,37 @@ class ContentService {
   //   return response;
   // };
 
+  // static getBySlug = async (slug) => {
+  //   try {
+  //     // Tìm nội dung với slug tương ứng
+  //     const content = await db.Contents.findOne({ where: { slug } });
+      
+  //     if (!content) {
+  //       throw new NotFoundRequestError("Không tìm thấy nội dung với slug " + slug);
+  //     }
+  
+  //     // Tìm tất cả các phần nội dung (contentParts) liên quan đến nội dung trên
+  //     const contentParts = await db.ContentParts.findAll({ where: { contentId: content.id } });
+  
+  //     // Tạo đối tượng response kết hợp thông tin từ cả nội dung và contentParts
+  //     const responseData = {
+  //       id: content.id,
+  //       categoryName: content.categoryName,
+  //       summarizeContent: content.summarizeContent,
+  //       content: content.content,
+  //       slug: content.slug,
+  //       contentParts: contentParts.map(part => ({
+  //         partNumber: part.partNumber,
+  //         partContent: part.partContent
+  //       }))
+  //     };
+  
+  //     return responseData;
+  //   } catch (error) {
+  //     throw error; // Re-throw lỗi để được xử lý bởi middleware xử lý lỗi global
+  //   }
+  // };
+
   static getBySlug = async (slug) => {
     try {
       // Tìm nội dung với slug tương ứng
@@ -205,20 +236,17 @@ class ContentService {
         throw new NotFoundRequestError("Không tìm thấy nội dung với slug " + slug);
       }
   
-      // Tìm tất cả các phần nội dung (contentParts) liên quan đến nội dung trên
-      const contentParts = await db.ContentParts.findAll({ where: { contentId: content.id } });
+      // Đếm số lượng phần của nội dung
+      const contentPartCount = await db.ContentParts.count({ where: { contentId: content.id } });
   
-      // Tạo đối tượng response kết hợp thông tin từ cả nội dung và contentParts
+      // Tạo đối tượng response chỉ chứa thông tin cơ bản của nội dung và số lượng phần
       const responseData = {
         id: content.id,
         categoryName: content.categoryName,
         summarizeContent: content.summarizeContent,
         content: content.content,
         slug: content.slug,
-        contentParts: contentParts.map(part => ({
-          partNumber: part.partNumber,
-          partContent: part.partContent
-        }))
+        contentPartCount: contentPartCount // Số lượng phần của nội dung
       };
   
       return responseData;

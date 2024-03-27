@@ -6,6 +6,7 @@ const newsRoute = require("./news");
 const userRoute = require("./user");
 const authRoute = require("./auth");
 const contentRoute = require("./content");
+const contentPartRoute = require("./contentpart");
 
 const route = Router();
 
@@ -14,5 +15,6 @@ route.use("/v1/api/sliders", sliderRoute);
 route.use("/v1/api/news", newsRoute);
 route.use("/v1/api/users", userRoute);
 route.use("/v1/api/contents", contentRoute);
+route.use("/v1/api/contentpart", contentPartRoute);
 
 module.exports = route;
