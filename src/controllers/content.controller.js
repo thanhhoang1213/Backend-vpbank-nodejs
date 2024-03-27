@@ -12,16 +12,17 @@ class ContentController {
    * @param {import("express").Response} res
    * @param {import("express").NextFunction} next
    */
+
   create = async (req, res, next) => {
     const data = req.body;
 
-    if (!data.content || !data.categoryName) {
-      throw new BadRequestError("Thiếu dữ liệu content hoặc categoryName");
+    if (!data.categoryName || !data.content || !data.contentParts) {
+      throw new BadRequestError("Thiếu dữ liệu categoryNme, content hoặc contentParts");
     }
 
     const response = await ContentService.create(data);
 
-    return new Created({ message: "Tạo nội dung thành công", metadata: response }).send(res);
+    return res.status(201).json({ message: "Tạo nội dung thành công", metadata: response });
   };
 
   /**
@@ -61,15 +62,37 @@ class ContentController {
    * @param {import("express").Response} res
    * @param {import("express").NextFunction} next
    */
+  // getById = async (req, res, next) => {
+  //   const id = req.params.id;
+
+  //   const response = await ContentService.getById(id);
+
+  //   return new Ok({
+  //     message: `Lấy dữ liệu nội dung theo id ${id} thành công`,
+  //     metadata: response,
+  //   }).send(res);
+  // };
+
   getById = async (req, res, next) => {
-    const id = req.params.id;
-
-    const response = await ContentService.getById(id);
-
-    return new Ok({
-      message: `Lấy dữ liệu nội dung theo id ${id} thành công`,
-      metadata: response,
-    }).send(res);
+    try {
+      const id = req.params.id;
+      const { content, contentParts } = await ContentService.getById(id);
+  
+      return new Ok({
+        message: `Lấy dữ liệu nội dung theo id ${id} thành công`,
+        metadata: { 
+          categoryName: content.categoryName,
+          summarizeContent: content.summarizeContent,
+          content: content.content,
+          contentParts: contentParts.map(part => ({
+            partNumber: part.partNumber,
+            partContent: part.partContent
+          }))
+        },
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
   };
 
   /**
@@ -78,16 +101,31 @@ class ContentController {
    * @param {import("express").Response} res
    * @param {import("express").NextFunction} next
    */
+  // getBySlug = async (req, res, next) => {
+  //   const slug = req.params.slug;
+
+  //   const response = await ContentService.getBySlug(slug);
+
+  //   return new Ok({
+  //     message: `Lấy dữ liệu nội dung theo slug ${slug} thành công`,
+  //     metadata: response,
+  //   }).send(res);
+  // };
+
   getBySlug = async (req, res, next) => {
     const slug = req.params.slug;
-
-    const response = await ContentService.getBySlug(slug);
-
-    return new Ok({
-      message: `Lấy dữ liệu nội dung theo slug ${slug} thành công`,
-      metadata: response,
-    }).send(res);
+  
+    try {
+      const response = await ContentService.getBySlug(slug);
+      return new Ok({
+        message: `Lấy dữ liệu nội dung theo slug ${slug} thành công`,
+        metadata: response,
+      }).send(res);
+    } catch (error) {
+      next(error); // Chuyển lỗi tới middleware xử lý lỗi
+    }
   };
+  
 
   /**
    * @description Delete a Nội dung by id

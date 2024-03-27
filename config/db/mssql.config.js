@@ -4,6 +4,7 @@ const sliderModel = require("../../models/sliders");
 const newsModel = require("../../models/news");
 const userModel = require("../../models/user");
 const contentModel = require("../../models/contents");
+const contentPartModel = require("../../models/contentparts");
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
@@ -23,6 +24,7 @@ db.Sliders = sliderModel(sequelize, DataTypes);
 db.News = newsModel(sequelize, DataTypes);
 db.Users = userModel(sequelize, DataTypes);
 db.Contents = contentModel(sequelize, DataTypes);
+db.ContentParts = contentPartModel(sequelize, DataTypes);
 
 let connectDB = async () => {
   try {
